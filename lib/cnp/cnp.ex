@@ -138,8 +138,8 @@ defmodule ValidatorsRo.CNP do
       end
       
        def birthdate(cnp) do
-        century = Map.get(@cnp_century_map, String.at(cnp, 0), :guess)
-        year = century <> String.slice(cnp, 1, 2)
+        century = String.at(cnp, 0)
+        year = cnp |> String.slice(cnp, 1, 2)
         month = cnp |> String.slice(3, 2)
         day = cnp |> String.slice(5, 2)
        
