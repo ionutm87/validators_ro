@@ -100,6 +100,8 @@ defmodule ValidatorsRo.CNP do
       """
       @spec parse_cnp(String.t) :: map
       def parse_cnp(cnp) when is_bitstring(cnp) do
+        valid = valid_cnp?(cnp)
+        
         <<sex_code::bytes-size(1)>> <>
         <<dob_year::bytes-size(2)>> <>
         <<dob_month::bytes-size(2)>> <>
