@@ -166,7 +166,7 @@ defmodule ValidatorsRo.CNP do
 
       defp valid_birthdate?(cnp) do
         century = Map.get(@cnp_century_map, String.at(cnp, 0), :guess)
-        year = century <> String.slice(cnp, 1, 2)
+        year = century <> String.slice(1, 2)
         month = cnp |> String.slice(3, 2)
         day = cnp |> String.slice(5, 2)
 
