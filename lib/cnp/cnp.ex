@@ -138,7 +138,7 @@ defmodule ValidatorsRo.CNP do
       end
       
        def birthdate(cnp) do
-        century = String.at(cnp, 0)
+        century = String.at(cnp, 0) |> String.to_integer()
         year = cnp |> String.slice(1, 2)
         month = cnp |> String.slice(3, 2)
         day = cnp |> String.slice(5, 2)
