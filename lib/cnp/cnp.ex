@@ -100,28 +100,26 @@ defmodule ValidatorsRo.CNP do
       """
       @spec parse_cnp(String.t) :: map
       def parse_cnp(cnp) when is_bitstring(cnp) do
-        parsed =
-          if valid = valid_cnp?(cnp) do
-            <<sex_code::bytes-size(1)>> <>
-              <<dob_year::bytes-size(2)>> <>
-              <<dob_month::bytes-size(2)>> <>
-              <<dob_day::bytes-size(2)>> <>
-              <<county_of_birth_code::bytes-size(2)>> <>
-              <<county_index::bytes-size(3)>> <>
-              <<control::bytes-size(1)>> = cnp
+        <<sex_code::bytes-size(1)>> <>
+        <<dob_year::bytes-size(2)>> <>
+        <<dob_month::bytes-size(2)>> <>
+        <<dob_day::bytes-size(2)>> <>
+        <<county_of_birth_code::bytes-size(2)>> <>
+        <<county_index::bytes-size(3)>> <>
+        <<control::bytes-size(1)>> = cnp
 
-            sex_code = sex_code |> String.to_integer()
-            sex = if Integer.is_odd(sex_code) do @cnp_sex_map.odd else @cnp_sex_map.even end
+        sex_code = sex_code |> String.to_integer()
+        sex = if Integer.is_odd(sex_code) do @cnp_sex_map.odd else @cnp_sex_map.even end
 
-            foreign_resident = sex_code in [7, 8]
+        foreign_resident = sex_code in [7, 8]
 
-            date_of_birth =
-              case sex_code do
-                n when n in [1, 2, 7, 8] -> "19#{dob_year}-#{dob_month}-#{dob_day}"
-                n when n in [3, 4] -> "18#{dob_year}-#{dob_month}-#{dob_day}"
-                n when n in [5, 6] -> "20#{dob_year}-#{dob_month}-#{dob_day}"
-              end
-            %{
+        date_of_birth =
+          case sex_code do
+            n when n in [1, 2, 7, 8] -> "19#{dob_year}-#{dob_month}-#{dob_day}"
+            n when n in [3, 4] -> "18#{dob_year}-#{dob_month}-#{dob_day}"
+            n when n in [5, 6] -> "20#{dob_year}-#{dob_month}-#{dob_day}"
+          end
+        parsed = %{
               sex: sex,
               date_of_birth: date_of_birth,
               county_of_birth_code: county_of_birth_code,
@@ -130,10 +128,6 @@ defmodule ValidatorsRo.CNP do
               control: control,
               foreign_resident: foreign_resident
             }
-          else
-            nil
-          end
-
         %{parsed: parsed, valid: valid}
       end
 
